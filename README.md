@@ -1,3 +1,5 @@
+## DOCUMENTS
+[Document Folder](https://docs.google.com/document/d/1B3hyYpLHZBUshn4AngdBniTwmoenCfGp5Ye6-JtVPFw/edit?usp=sharing)
 [Database](https://datasets.imdbws.com/)
 - We only downloaded -
     title.basics.tsv
@@ -5,8 +7,7 @@
 - Then, we merged on "MergeData.ipynb"
 - We will be working with "merged_data.csv"
 
-[Document Folder](https://docs.google.com/document/d/1B3hyYpLHZBUshn4AngdBniTwmoenCfGp5Ye6-JtVPFw/edit?usp=sharing)
-
+## TO-DO LIST
 <ul>
 <li> Create Movie Objects (Read File input and stream into movie objects) - Christian </li>
 <li> Polish menu to accept "would you rather pop, length, rating" and account edge cases - Fernando </li>
