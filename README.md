@@ -1,5 +1,5 @@
 ## DOCUMENTS
-[Document Folder](https://docs.google.com/document/d/1B3hyYpLHZBUshn4AngdBniTwmoenCfGp5Ye6-JtVPFw/edit?usp=sharing) . 
+[Document Folder](https://docs.google.com/document/d/1B3hyYpLHZBUshn4AngdBniTwmoenCfGp5Ye6-JtVPFw/edit?usp=sharing) \
 [Database](https://datasets.imdbws.com/)
 - We only downloaded -
     title.basics.tsv
