@@ -20,18 +20,3 @@ int main()
     cin >> year; cout << endl;
     // If statement for edge cases on choosing the year
 }
-
-
-/*
-Assignments:
-* Create Movie Objects (Read File input and stream into movie objects) - Christian 
-* Polish menu to accept "would you rather pop, length, rating" and account edge cases
-* Ask how many movies in the rank (top 3, 10, 100, etc)
-* Loop through .csv and make objects
-* Sort with merge/quick
- - Input: vector array of movie objects
- - Output: sorted list of movies
-* Print sorted list of movies (based on user input for rank amount)
-* Work on output (How to display output)
-* Show how much time it took to sort with quick sort and merge sort
-*/
