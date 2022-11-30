@@ -23,37 +23,15 @@ int main()
 
 
 /*
-
-* Download title.ratings.tsv.gz and title.basics.tsv.gz from https://datasets.imdbws.com/
-
-* Get columns FROM title.basics.tsv.gz
-    tconst (string) - alphanumeric unique identifier of the title
-    titleType (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)
-    primaryTitle (string) – the more popular title / the title used by the filmmakers on promotional materials at the point of release
-    isAdult (boolean) - 0: non-adult title; 1: adult title
-    startYear (YYYY) – represents the release year of a title. In the case of TV Series, it is the series start year
-    runtimeMinutes – primary runtime of the title, in minutes
-    genres (string array) – includes up to three genres associated with the title
-
-* Get columns FROM title.ratings.tsv.gz    
-    tconst (string) - alphanumeric unique identifier of the title
-    averageRating – weighted average of all the individual user ratings
-    numVotes - number of votes the title has received 
-
 Assignments:
-1. Create Movie Objects (Read File input and stream into movie objects) - Christian 
-2. Create total weight based on desired input - Fernando
-3. Load movie pointers into vector
-4. Sort with merge/quick
-5. Output sorted vector
-6. Work on user input (What categories to be more weighted/how much output desired to be seen)
-7. Work on output (How to display output)
-
-
-
-
-Christian: FILTER - isAdult and titleType == "movie" (from title.basics.tsv.gz)
-Fernando: 
-Brian: 
-
+* Create Movie Objects (Read File input and stream into movie objects) - Christian 
+* Polish menu to accept "would you rather pop, length, rating" and account edge cases
+* Ask how many movies in the rank (top 3, 10, 100, etc)
+* Loop through .csv and make objects
+* Sort with merge/quick
+ - Input: vector array of movie objects
+ - Output: sorted list of movies
+* Print sorted list of movies (based on user input for rank amount)
+* Work on output (How to display output)
+* Show how much time it took to sort with quick sort and merge sort
 */
