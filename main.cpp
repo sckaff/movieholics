@@ -1,7 +1,37 @@
 #include <fstream>
+#include <string>
 #include "Movie.h"
+#include "sort.h"
+
+vector<Movie*> inputMovies()
+{
+    vector<Movie*> movieList;
+    ifstream movieData("data/merged_data.csv");
+    if (movieData.is_open())
+    {
+        string buffer, id, title, startYear, runtime, genre, avgRating, numVotes, runTimeNorm, avgRatingNorm, numVotesNorm;
+        getline(movieData, buffer); //Skips Initial Line of column titles
+        while (getline(movieData, id, ',')) //Where an ID exists, read line
+        {
+            getline(movieData, title, ',');
+            getline(movieData, startYear, ',');
+            getline(movieData, runtime, ',');
+            getline(movieData, genre, ',');
+            getline(movieData, avgRating, ',');
+            getline(movieData, numVotes, ',');
+            getline(movieData, runTimeNorm, ',');
+            getline(movieData, avgRatingNorm, ',');
+            getline(movieData, numVotesNorm);
+            movieList.push_back(new Movie(id, title, startYear, stoi(runtime), genre, stod(avgRating), stoi(numVotes), stod(runTimeNorm), stod(avgRatingNorm), stod(numVotesNorm)));
+        }
+    }
+    movieData.close();
+    return movieList; //Returns list of movie objects
+}
+
 int main()
 {
+    vector<Movie*> movieList = inputMovies();
     int genre, year;
     
     // Interface
