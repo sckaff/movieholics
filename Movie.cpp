@@ -17,10 +17,6 @@ string Movie::getId() {
     return this->id;
 }
 
-string Movie::getType() {
-    return this->type;
-}
-
 string Movie::getTitle() {
     return this->title;
 }
@@ -35,8 +31,4 @@ int Movie::getRuntime() {
 
 string Movie::getGenre() {
     return this->genre;
-}
-
-double Movie::getScore(){
-    return this->score;
 }

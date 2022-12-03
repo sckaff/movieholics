@@ -27,7 +27,7 @@ void merge(vector<Movie*>& list, int beginning, int middle, int end) //Inspired 
     int realPos = beginning;
     while (posOne < countOne && posTwo < countTwo)
     {
-        if (tempLeft[posOne]->getScore() <= tempRight[posTwo]->getScore())
+        if (tempLeft[posOne]->score <= tempRight[posTwo]->score)
         {
             list[realPos] = tempLeft[posOne];
             posOne++;
@@ -77,16 +77,16 @@ void swap(vector<Movie*>& list, int indexOne, int indexTwo)
 
 double partition(vector<Movie*>& list, int low, int high)
 {
-    double pivot = list[high]->getScore(); //Using end value of vector as pivot
+    double pivot = list[high]->score; //Using end value of vector as pivot
     double up = low, down = high;
 
     while (up < down)
     {
-        while (list[up]->getScore() < pivot && up < list.size() - 1) //Iterates until value higher than pivot found
+        while (list[up]->score < pivot && up < list.size() - 1) //Iterates until value higher than pivot found
         {
             up++;
         }
-        while (down >= 0 && list[down]->getScore() >= pivot) //Iterates until value lower than pivot found
+        while (down >= 0 && list[down]->score >= pivot) //Iterates until value lower than pivot found
         {
             down--;
         }
