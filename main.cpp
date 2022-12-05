@@ -4,7 +4,12 @@
 #include "sort.h"
 #include <iomanip>
 #include <regex>
+#include <chrono>
+#include <map>
+#include <unordered_map>
 #include "progressbar.hpp"
+
+using namespace chrono;
 
 set<string> genres;
 regex regGenre = regex("(\\d$)");
@@ -117,7 +122,7 @@ int main()
 
     cout << "runtime weight: " << runtime_weight << " count weight: " << vote_count_weight << " rating weight: " << rating_weight << "\n";
 
-    vector<Movie*> new_list;
+    vector<Movie*> merge_list;
     if(filter_genre)
     {
         for (int i=0; i<movieList.size(); i++)
@@ -126,7 +131,7 @@ int main()
             {
                 movieList[i]->score = ( ((movieList[i]->runtime/60)*runtime_weight) + ((movieList[i]->numVotes/1000*vote_count_weight)) + ((movieList[i]->avgRating)*(rating_weight)) );
                 //cout << movieList[i]->score << "\n";
-                new_list.push_back(movieList[i]);
+                merge_list.push_back(movieList[i]);
             }
         }
     }
@@ -135,14 +140,37 @@ int main()
         for (int i=0; i<movieList.size(); i++)
         {
             movieList[i]->score = ( ((movieList[i]->runtime/60)*runtime_weight) + ((movieList[i]->numVotes/100*vote_count_weight)) + ((movieList[i]->avgRating)*(rating_weight)) );
-            new_list.push_back(movieList[i]);
+            merge_list.push_back(movieList[i]);
         }
     }
 
-    mergeSort(new_list, 0, new_list.size()-1);
-    for (int i=new_list.size() - 1; i>new_list.size()-20; i--)
+    vector<Movie*> quick_list = merge_list;
+
+
+
+    steady_clock::time_point merge_begin = chrono::steady_clock::now();
+    mergeSort(merge_list, 0, merge_list.size()-1);
+    steady_clock::time_point merge_end = chrono::steady_clock::now();
+
+    steady_clock::time_point quick_begin = chrono::steady_clock::now();
+    quickSort(quick_list, 0, quick_list.size()-1);
+    steady_clock::time_point quick_end = chrono::steady_clock::now();
+
+    cout << "Merge Sort Time: " << chrono::duration_cast<chrono::microseconds>(merge_end - merge_begin).count() << " nanoseconds\n";
+    cout << "Quick Sort Time: " << chrono::duration_cast<chrono::microseconds>(quick_end - quick_begin).count() << " nanoseconds\n";
+
+    for (int i=0; i<merge_list.size(); i++)
     {
-        cout << "Title: " << new_list[i]->title << " Score: " << new_list[i]->score << " Genre: " << new_list[i]->genre << "\n";
+        if(merge_list[i]->title == quick_list[i]->title)
+        {
+            //cout << "Title: " << merge_list[i]->title << " Score: " << merge_list[i]->score << " Genre: " << merge_list[i]->genre << "\n";
+        }
+        else
+        {
+            cout << "mTitle: " << merge_list[i]->title << " Score: " << merge_list[i]->score << " Genre: " << merge_list[i]->genre << "\n";
+            cout << "qTitle: " << quick_list[i]->title << " Score: " << quick_list[i]->score << " Genre: " << quick_list[i]->genre << "\n";
+            cout << "ERROR: Mismatched movies at index " << i << "\n";
+        }
     }
 
     cin >> jimbo;
