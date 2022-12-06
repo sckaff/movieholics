@@ -1,7 +1,7 @@
 .DS_STORE
 .vscode/*
-Data/*
-!Data/*.txt
 main.exe
+Data/*.tsv
+Data/*.gz
 *.o
 *.exe
