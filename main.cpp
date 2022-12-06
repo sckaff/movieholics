@@ -5,15 +5,15 @@
 #include <chrono>
 #include <cmath>
 
-#include "Sort.h"
-#include "Movie.h"
-#include "progressbar.hpp"
+#include "../../Desktop/proj3/Sort.h"
+#include "../../Desktop/proj3/Movie.h"
+#include "../../Desktop/proj3/Movie.cpp"
+#include "../../Desktop/proj3/progressbar.hpp"
 
 using namespace chrono;
 
 set<string> genres;
 regex regGenre = regex("(\\d$)");
-regex regWeight = regex("(\\d{1,}) (\\d{1,}) (\\d{1,}$)");
 
 vector<Movie*> inputMovies()
 {
@@ -44,6 +44,7 @@ vector<Movie*> inputMovies()
                 percentage = ((100*completed_count)/total_movies);
                 bar.update();
             }
+
             movieList.push_back(new Movie(id, title, startYear, stoi(runtime), genre, stod(avgRating), stoi(numVotes), stod(runTimeNorm), stod(avgRatingNorm), stod(numVotesNorm)));
             completed_count++;
         }
@@ -100,20 +101,20 @@ int main()
     int popularity_weight;
     int rating_weight;
 
-    char set_weight;
+    char set_rating_weight;
     bool not_done = true;
     while(not_done){
         cout << "Are you in the mood for a highly rated (h) or poorly rated (p) film?" << endl; //Determine sign +/-
-        cin >> set_weight; cin.clear();
+        cin >> set_rating_weight; cin.clear();
 
-        switch (set_weight)
+        switch (set_rating_weight)
         {
         case 'h':
-            rating_weight = 1;
+            rating_weight = 80;
             not_done = false;
             break;
         case 'p':
-            rating_weight = -1;
+            rating_weight = -80;
             not_done = false;
             break;
         default:
@@ -122,19 +123,20 @@ int main()
         }
     }
 
+    char set_pop_weight;
     not_done = true;
     while(not_done){
-        cout << "Do you want a more (m) or less (l) popular film?" << endl; //Determine sign +/-
-        cin >> set_weight; cin.clear();
+        cout << "Do you want a more (m) popular or less (l) popular film?" << endl; //Determine sign +/-
+        cin >> set_pop_weight; cin.clear();
 
-        switch (set_weight)
+        switch (set_pop_weight)
         {
         case 'm':
-            popularity_weight = 1;
+            popularity_weight = 2;
             not_done = false;
             break;
         case 'l':
-            popularity_weight = -1;
+            popularity_weight = -2;
             not_done = false;
             break;
         default:
@@ -143,12 +145,13 @@ int main()
         }
     }
 
+    char set_length_weight;
     not_done = true;
     while(not_done){
         cout << "Would you like longer movies (l), shorter movies (s)? Type (x) to ignore length." << endl;
-        cin >> set_weight; cin.clear();
+        cin >> set_length_weight; cin.clear();
 
-        switch (set_weight)
+        switch (set_length_weight)
         {
         case 'l':
             runtime_weight = 1;
@@ -159,29 +162,6 @@ int main()
             not_done = false;
             break;
         case 'x':
-            runtime_weight = -3;
-            not_done = false;
-            break;
-        default:
-            cout << "Invalid choice. Please select again\n";
-            continue;
-        }
-    }
-
-    not_done = true;
-    while(not_done){  
-        cout << "Do you care more about rating (r) or popularity (p)?" << endl; //Determines weights
-        cin >> set_weight; cin.clear();
-        switch (set_weight)
-        {
-        case 'r':
-            rating_weight *= 3;
-            popularity_weight *= 1;
-            not_done = false;
-            break;
-        case 'p':
-            rating_weight *= 1;
-            popularity_weight *= 3;
             not_done = false;
             break;
         default:
@@ -201,13 +181,17 @@ int main()
 
             if(movieList[i]->genre == selected_genre)
             {
+                int weighted_rating = 15*(movieList[i]->avgRatingNorm)*rating_weight;
+                int weighted_pop = 10*(movieList[i]->numVotesNorm)*popularity_weight;
 
-                movie_score = 100*(((movieList[i]->runTimeNorm)*exp(1+runtime_weight)) + 
-                      ((movieList[i]->numVotesNorm)*exp(1+popularity_weight)) + 
-                      ((movieList[i]->avgRatingNorm)*exp(1+rating_weight)));
+                if(set_length_weight == 'x'){
+                    movie_score = int(weighted_rating + weighted_pop);
+                }
+                else{
+                    movie_score = int(weighted_rating + weighted_pop + 10*(movieList[i]->runTimeNorm)*runtime_weight);
+                }
 
                 movieList[i]->score = movie_score;
-                //cout << movieList[i]->score << "\n";
                 merge_list.push_back(movieList[i]);
             }
         }
@@ -217,9 +201,15 @@ int main()
         for (int i=0; i<movieList.size(); i++)
         {
 
-            movie_score = 100*(((movieList[i]->runTimeNorm)*exp(1+runtime_weight)) + 
-                      ((movieList[i]->numVotesNorm)*exp(1+popularity_weight)) + 
-                      ((movieList[i]->avgRatingNorm)*exp(1+rating_weight)));
+            int weighted_rating = 15*(movieList[i]->avgRatingNorm)*rating_weight;
+            int weighted_pop = 10*(movieList[i]->numVotesNorm)*popularity_weight;
+
+            if(set_length_weight == 'x'){
+                movie_score = int(weighted_rating + weighted_pop);
+            }
+            else{
+                movie_score = int(weighted_rating + weighted_pop + 10*(movieList[i]->runTimeNorm)*runtime_weight);
+            }
 
             movieList[i]->score = movie_score;
             merge_list.push_back(movieList[i]);
@@ -240,7 +230,7 @@ int main()
 
     cout << "Completed\n";
     cout << "Merge Sort Time: " << chrono::duration_cast<chrono::microseconds>(merge_end - merge_begin).count() << " nanoseconds\n";
-    cout << "Quick Sort Time: " << chrono::duration_cast<chrono::microseconds>(quick_end - quick_begin).count() << " nanoseconds\n";
+    cout << "Quick Sort Time: " << chrono::duration_cast<chrono::microseconds>(quick_end - quick_begin).count() << " nanoseconds\n\n";
 
     bool specific_movie = false;
     bool random_movie = false;
@@ -296,10 +286,18 @@ int main()
             }
         }
 
-        cout << "||============================================|| Popularity: " << merge_list[chosen_movie_index]->numVotes << " | Average Rating: " << merge_list[chosen_movie_index]->avgRating << " | Length: " << merge_list[chosen_movie_index]->runtime << "min" << endl
+        cout << "||============================================|| Popularity: " << merge_list[chosen_movie_index]->numVotes << " | Average Rating: " << merge_list[chosen_movie_index]->avgRating << " | Length: " << merge_list[chosen_movie_index]->runtime << " mins" << endl
              << "  YOUR MOVIE #" << chosen_movie_index << ": " << merge_list[chosen_movie_index]->title << endl
-             << "||============================================||" << endl
-             << "MOVIEHOLICS SCORE: " << merge_list[chosen_movie_index]->score << endl;
+             << "||============================================||"
+             << " MOVIEHOLICS SCORE: " << merge_list[chosen_movie_index]->score;
+
+        if(!filter_genre){
+            cout << " | Genre: " << merge_list[chosen_movie_index]->genre << endl;
+        }
+        else{
+            cout << endl;
+        }
+
     }
     else
     {
@@ -314,21 +312,36 @@ int main()
                 for (int i = merge_list.size() - 1; i > merge_list.size() - how_many_movies - 1; i--)
                 {   
                     if (i == merge_list.size() - 1){
-                        cout << "||============================================|| Popularity: " << merge_list[i]->numVotes << " | Average Rating: " << merge_list[i]->avgRating << " | Length: " << merge_list[i]->runtime << "min" << endl
-                            << "  YOUR PERFECT MOVIE: " << merge_list[i]->title << endl
-                            << "||============================================||" << endl
-                            << "MOVIEHOLICS SCORE: " << merge_list[i]->score << endl << endl;
-                            
-                        
+                        cout << "||============================================|| Popularity: " << merge_list[i]->numVotes << " | Average Rating: " << merge_list[i]->avgRating << " | Length: " << merge_list[i]->runtime << " mins" << endl
+                            << "  YOUR PERFECT MOVIE: \"" << merge_list[i]->title << "\"\n"
+                            << "||============================================||"
+                            << " MOVIEHOLICS SCORE: " << merge_list[i]->score;
+
+                    if(!filter_genre){
+                        cout << " | Genre: " << merge_list[i]->genre << endl;
+                    }
+                    else{
+                        cout << endl;
+                        }
+
+
                         cout << "In case you're wondering, here are the next " << how_many_movies - 1 << " movies in the list: \n"; 
                     }    
                     else
                     {   
-                        cout << "#" << movie_number_label << ": Title: " << merge_list[i]->title 
-                            << " | Popularity: " << merge_list[i]->numVotes 
+                        cout << "#" << movie_number_label << ": \"" << merge_list[i]->title
+                            << "\" || MOVIEHOLICS SCORE: " << merge_list[i]->score
+                            << " || Popularity: " << merge_list[i]->numVotes
                             << " | Average Rating: " << merge_list[i]->avgRating 
-                            << " | Length: " << merge_list[i]->runtime << "min"
-                            << " | MOVIEHOLICS SCORE: " << merge_list[i]->score << endl;
+                            << " | Length: " << merge_list[i]->runtime << "min";
+
+                        if(!filter_genre){
+                            cout << " | Genre: " << merge_list[i]->genre << endl;
+                        }
+                        else{
+                            cout << endl;
+                        }
+
                     }
                     movie_number_label++;
                 }
@@ -342,26 +355,7 @@ int main()
         
     }
 
+    //Not close the program instantly
     cout << "\nType anything to close the program\n";
-
     cin >> jimbo;
-
-    // vector<Movie*> movieList = inputMovies();
-    // int genre, year;
-    
-    // // Interface
-    // ////Get genre
-    // cout << "Welcome to Movie Mappers etc." << endl;
-    // cout << "|| ------------------------||" << endl;
-    // cout << "What genre do you want?" << endl;
-    // cout << "1. Action\n2. Comedy\n3. Drama\n4. Horror\n"; //Update, alphabetical?
-    // cin >> genre; cout << endl;
-    // // If statement for edge cases on choosing the genre
-    
-    // cin.clear();
-    // ////Get year
-    // cout << "What genre do you want?" << endl;
-    // cout << "1. Before 1970\n2. 1970-1979\n3. 1980-1989\n4. 1990-1999\n5. 2000-2009\n6. 2010-2019\n7. 2020-Present\n" << endl; //Update, alphabetical?
-    // cin >> year; cout << endl;
-    // // If statement for edge cases on choosing the year
 }

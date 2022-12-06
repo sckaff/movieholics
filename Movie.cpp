@@ -9,7 +9,7 @@ Movie::Movie(string _id, string _title, string _startYear, int _runtime, string 
     this->avgRating = _avgRating;
     this->numVotes = _numVotes;
     this->runTimeNorm = _runTimeNorm;
-    this->avgRatingNorm = avgRatingNorm;
+    this->avgRatingNorm = _avgRatingNorm;
     this->numVotesNorm = _numVotesNorm;
 }
 
