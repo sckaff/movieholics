@@ -32,12 +32,25 @@ void merge(vector<Movie*>& list, int beginning, int middle, int end) //Inspired 
             list[realPos] = tempLeft[posOne];
             posOne++;
         }
-        else
+        else if (tempLeft[posOne]->score > tempRight[posTwo]->score)
         {
             list[realPos] = tempRight[posTwo];
             posTwo++;
         }
-    realPos++;
+        else
+        {
+            if (tempLeft[posOne]->title.compare(tempRight[posTwo]->title) < 0)
+            {
+                list[realPos] = tempLeft[posOne];
+                posOne++;
+            }
+            else
+            {
+                list[realPos] = tempRight[posTwo];
+                posTwo++;
+            }
+        }
+        realPos++;
     }
     //Add remaining values in sorted order after either temp array is traveresed
     while (posOne < countOne)
@@ -67,26 +80,49 @@ void mergeSort(vector<Movie*>& list, int beginning, int end)
 
 //Quick Sort
 
+bool comp(int a1, string a2, int b1, string b2)
+{
+    if (a1 < b1)
+    {
+        return false;
+    }
+    else if (a1 > b1)
+    {
+        return true;
+    }
+    else if (a1 == b1)
+    {
+        if (a2.compare(b2) < 0)
+        {
+            return false;
+        }
+        else return true;
+    }
+}
+
 void swap(vector<Movie*>& list, int indexOne, int indexTwo)
 {
-    Movie* tempIndex;
-    tempIndex = list[indexOne];
+    Movie* tempIndexValue;
+    tempIndexValue = list[indexOne];
     list[indexOne] = list[indexTwo];
-    list[indexTwo] = tempIndex;
+    list[indexTwo] = tempIndexValue;
 }
 
 int partition(vector<Movie*>& list, int low, int high)
 {
     double pivot = list[high]->score; //Using end value of vector as pivot
+    string pivotB = list[high]->title; //Using end value of vector as pivot
+    bool isDupliate = false;
     int up = low, down = high;
 
     while (up < down)
     {
-        while (list[up]->score < pivot && up < high) //Iterates until value higher than pivot found
+        while (!comp(list[up]->score, list[up]->title, pivot, pivotB) && up < high && !isDupliate) //Iterates until value higher than pivot found
         {
             up++;
         }
-        while (down > low && list[down]->score >= pivot) //Iterates until value lower than pivot found
+        isDupliate = false;
+        while (down > low && comp(list[down]->score, list[down]->title, pivot, pivotB) && !isDupliate) //Iterates until value lower than pivot found
         {
             down--;
         }
