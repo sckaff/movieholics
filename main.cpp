@@ -1,12 +1,13 @@
 #include <fstream>
 #include <string>
-#include "Movie.h"
-#include "sort.h"
 #include <iomanip>
 #include <regex>
 #include <chrono>
 #include <map>
 #include <unordered_map>
+
+#include "Sort.h"
+#include "Movie.h"
 #include "progressbar.hpp"
 
 using namespace chrono;
@@ -18,7 +19,7 @@ regex regWeight = regex("(\\d{1,}) (\\d{1,}) (\\d{1,}$)");
 vector<Movie*> inputMovies()
 {
     vector<Movie*> movieList;
-    ifstream movieData("data/merged_data_new.csv");
+    ifstream movieData("Data/merged_data_new.csv");
     if (movieData.is_open())
     {
         int completed_count = 0;
@@ -97,9 +98,10 @@ int main()
     }
 
     int runtime_weight;
-    int vote_count_weight;
+    int popularity_weight;
     int rating_weight;
     
+    /*     
     cout << "Enter your weights for runtime, vote_count, and rating weight using this format without quotes\n";
     cout << "\"1 2 3\"\n";
 
@@ -118,9 +120,101 @@ int main()
             break;
         }
         cout << "Invalid weights. Please select again\n";
+    } 
+
+    cout << "runtime weight: " << runtime_weight << " count weight: " << popularity_weight << " rating weight: " << rating_weight << "\n";
+    */
+
+    char set_weight;
+    bool not_done = true;
+    while(not_done){
+        cout << "Are you in the mood for a highly rated (h) or poorly rated (p) film?" << endl; //Determine sign +/-
+        cin >> set_weight; cin.clear();
+
+        switch (set_weight)
+        {
+        case 'h':
+            rating_weight = 1;
+            not_done = false;
+            break;
+        case 'p':
+            rating_weight = -1;
+            not_done = false;
+            break;
+        default:
+            cout << "Invalid choice. Please select again\n";
+            continue;
+        }
     }
 
-    cout << "runtime weight: " << runtime_weight << " count weight: " << vote_count_weight << " rating weight: " << rating_weight << "\n";
+    cin >> set_weight; cin.clear();
+    not_done = true;
+    while(not_done){
+        cout << "Do you want a more (m) or less (l) popular film?" << endl; //Determine sign +/-
+        cin >> set_weight; cin.clear();
+
+        switch (set_weight)
+        {
+        case 'm':
+            popularity_weight = 1;
+            not_done = false;
+            break;
+        case 'l':
+            popularity_weight = -1;
+            not_done = false;
+            break;
+        default:
+            cout << "Invalid choice. Please select again\n";
+            continue;
+        }
+    }
+
+    cin >> set_weight; cin.clear();
+    not_done = true;
+    while(not_done){
+        cout << "Would you like longer movies (l), shorter movies (s)?" << endl;
+        cin >> set_weight; cin.clear();
+
+        switch (set_weight)
+        {
+        case 'l':
+            runtime_weight = 1;
+            not_done = false;
+            break;
+        case 's':
+            runtime_weight = -1;
+            not_done = false;
+            break;
+        default:
+            cout << "Invalid choice. Please select again\n";
+            continue;
+        }
+    }
+
+    cin >> set_weight; cin.clear();
+    not_done = true;
+    while(not_done){  
+        cout << "Do you care more about rating (r) or popularity (p)?" << endl; //Determines weights
+        cin >> set_weight; cin.clear();
+        switch (set_weight)
+        {
+        case 'r':
+            rating_weight *= 0.8;
+            popularity_weight *= 0.2;
+            not_done = false;
+            break;
+        case 'p':
+            rating_weight *= 0.2;
+            popularity_weight *= 0.8;
+            not_done = false;
+            break;
+        default:
+            cout << "Invalid choice. Please select again\n";
+            continue;
+        }
+    }
+    cin >> set_weight; cin.clear();
+
 
     vector<Movie*> merge_list;
     if(filter_genre)
@@ -129,7 +223,7 @@ int main()
         {
             if(movieList[i]->genre == selected_genre)
             {
-                movieList[i]->score = ( ((movieList[i]->runtime/60)*runtime_weight) + ((movieList[i]->numVotes/1000*vote_count_weight)) + ((movieList[i]->avgRating)*(rating_weight)) );
+                movieList[i]->score = (((movieList[i]->runTimeNorm)*runtime_weight) + ((movieList[i]->numVotesNorm)*popularity_weight) + ((movieList[i]->avgRatingNorm)*rating_weight));
                 //cout << movieList[i]->score << "\n";
                 merge_list.push_back(movieList[i]);
             }
@@ -139,7 +233,7 @@ int main()
     {
         for (int i=0; i<movieList.size(); i++)
         {
-            movieList[i]->score = ( ((movieList[i]->runtime/60)*runtime_weight) + ((movieList[i]->numVotes/100*vote_count_weight)) + ((movieList[i]->avgRating)*(rating_weight)) );
+            movieList[i]->score = (((movieList[i]->runTimeNorm)*runtime_weight) + ((movieList[i]->numVotesNorm)*popularity_weight) + ((movieList[i]->avgRatingNorm)*rating_weight));
             merge_list.push_back(movieList[i]);
         }
     }
