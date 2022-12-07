@@ -288,7 +288,7 @@ int main()
         }
 
         cout << "||============================================|| Popularity: " << merge_list[chosen_movie_index]->numVotes << " | Average Rating: " << merge_list[chosen_movie_index]->avgRating << " | Length: " << merge_list[chosen_movie_index]->runtime << " mins" << endl
-             << "  YOUR MOVIE #" << chosen_movie_index - merge_list.size() + 1 << ": " << merge_list[chosen_movie_index]->title << endl
+             << "  YOUR MOVIE #" << chosen_movie_index - merge_list.size() + 2 << ": " << merge_list[chosen_movie_index]->title << endl
              << "||============================================||"
              << " MOVIEHOLICS SCORE: " << merge_list[chosen_movie_index]->score;
 
