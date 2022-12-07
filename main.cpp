@@ -113,7 +113,7 @@ int main()
             not_done = false;
             break;
         case 'p':
-            rating_weight = -160;
+            rating_weight = -80;
             not_done = false;
             break;
         default:
@@ -266,6 +266,7 @@ int main()
         if(random_movie)
         {
             chosen_movie_index = (rand() % merge_list.size());
+            chosen_movie_index = merge_list.size() - 1 - chosen_movie_index;
         }
         else
         {
@@ -277,6 +278,7 @@ int main()
                 if (chosen_movie_index >= 0 && chosen_movie_index < merge_list.size())
                 {
                     not_done = false;
+                    chosen_movie_index = merge_list.size() - 1 - chosen_movie_index;
                 }
                 else
                 {
