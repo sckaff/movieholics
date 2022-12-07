@@ -5,10 +5,9 @@
 #include <chrono>
 #include <cmath>
 
-#include "../../Desktop/proj3/Sort.h"
-#include "../../Desktop/proj3/Movie.h"
-#include "../../Desktop/proj3/Movie.cpp"
-#include "../../Desktop/proj3/progressbar.hpp"
+#include "Sort.h"
+#include "Movie.h"
+#include "progressbar.hpp"
 
 using namespace chrono;
 
