@@ -113,7 +113,7 @@ int main()
             not_done = false;
             break;
         case 'p':
-            rating_weight = -80;
+            rating_weight = -160;
             not_done = false;
             break;
         default:
