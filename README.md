@@ -5,6 +5,9 @@ The program takes data from the imdb movie database https://datasets.imdbws.com/
 rating popularity, and length to give each movie a weight. Once weighted, the movies are sorted by score with both quick sort and merge sort and
 then displayed. The time for each sorting algorithim is also dispalyed.
 
+## Demonstration
+![](ReadmeResources/demo_run.gif)
+
 ## Table of Contents
 
 - [Prerequisites](#Prerequisites)
